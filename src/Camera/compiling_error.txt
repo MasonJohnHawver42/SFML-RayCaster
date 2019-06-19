@@ -1,0 +1,12 @@
+/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+/tmp/ccUo0wuk.o: In function `Camera::display(int, sf::RenderWindow*)':
+camera.cpp:(.text+0xb15): undefined reference to `sf::RectangleShape::RectangleShape(sf::Vector2<float> const&)'
+camera.cpp:(.text+0xb95): undefined reference to `sf::Transformable::setPosition(float, float)'
+camera.cpp:(.text+0xbae): undefined reference to `sf::RenderStates::Default'
+camera.cpp:(.text+0xbb9): undefined reference to `sf::RenderTarget::draw(sf::Drawable const&, sf::RenderStates const&)'
+/tmp/ccUo0wuk.o: In function `sf::RectangleShape::~RectangleShape()':
+camera.cpp:(.text._ZN2sf14RectangleShapeD2Ev[_ZN2sf14RectangleShapeD5Ev]+0xf): undefined reference to `vtable for sf::RectangleShape'
+camera.cpp:(.text._ZN2sf14RectangleShapeD2Ev[_ZN2sf14RectangleShapeD5Ev]+0x1d): undefined reference to `vtable for sf::RectangleShape'
+camera.cpp:(.text._ZN2sf14RectangleShapeD2Ev[_ZN2sf14RectangleShapeD5Ev]+0x31): undefined reference to `sf::Shape::~Shape()'
+collect2: error: ld returned 1 exit status
