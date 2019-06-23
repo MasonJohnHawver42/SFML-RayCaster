@@ -36,28 +36,31 @@ void Camera::display(int rayCount, sf::RenderWindow * window) {
   {
     Intersection * inter = castRay(rad);
 
-    double dis = pos->getDis(*inter->getHit());
-    dis = dis * cos((jump * i) - (fov / 2));
+    if(!inter->getHit()->equals(*new Vector<double>()))
+    {
+      double dis = pos->getDis(*inter->getHit());
+      dis = dis * cos((jump * i) - (fov / 2));
 
-    double sliceHieght = disToPP / dis;
+      double sliceHieght = disToPP / dis;
 
-    sf::Sprite wall;
-    sf::Texture wallTexture = world->getMap()->get(*(inter->getWall()))->getTexture();
-    //wallTexture.loadFromFile("../../assets/walls/wall.jpg");
-    wall.setTexture(wallTexture);
+      sf::Sprite wall;
+      sf::Texture wallTexture = world->getMap()->get(*(inter->getWall()))->getTexture();
 
-    double scale = sliceHieght / wall.getTexture()->getSize().y;
+      wall.setTexture(wallTexture);
 
-    wall.setTextureRect(sf::IntRect((int)(wall.getTexture()->getSize().y * inter->getSlice()), 0, 1, wall.getTexture()->getSize().y));
-    wall.setScale(xScale, scale);
+      double scale = sliceHieght / wall.getTexture()->getSize().y;
 
-    wall.setPosition(sliceWidth * i, (window->getSize().y - sliceHieght) / 2.0);
+      wall.setTextureRect(sf::IntRect((int)(wall.getTexture()->getSize().y * inter->getSlice()), 0, 1, wall.getTexture()->getSize().y));
+      wall.setScale(xScale, scale);
 
-    int colorG = 255 * (min((double) window->getSize().y, sliceHieght + (window->getSize().y / 2)) / window->getSize().y);
+      wall.setPosition(sliceWidth * i, (window->getSize().y - sliceHieght) / 2.0);
 
-    wall.setColor(*new sf::Color(colorG, colorG, colorG));
+      int colorG = 255 * (min((double) window->getSize().y, sliceHieght + (window->getSize().y / 2)) / window->getSize().y);
 
-    window->draw(wall);
+      wall.setColor(*new sf::Color(colorG, colorG, colorG));
+
+      window->draw(wall);
+    }
 
 
     rad += jump;
