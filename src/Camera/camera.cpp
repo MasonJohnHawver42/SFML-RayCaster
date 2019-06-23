@@ -1,5 +1,4 @@
 #include "../World/world.cpp"
-#include "SFML/Graphics.hpp"
 
 class Camera : public Actor{
 private:
@@ -15,7 +14,7 @@ public:
     world = w;
     setGrid(world->getMap());
 
-    fov = M_PI / 3;
+    fov = M_PI/3;
   }
 
   void display(int rayCount, sf::RenderWindow * window);
@@ -31,27 +30,35 @@ void Camera::display(int rayCount, sf::RenderWindow * window) {
 
   int sliceWidth = max(1, (int)(window->getSize().x / rayCount));
 
+  double xScale = sliceWidth / 1;
+
   for(int i = 0; i < rayCount; i++)
   {
-    Vector<double> inter = castRay(rad);
+    Intersection * inter = castRay(rad);
 
-    //inter.toString();
-
-    double dis = pos->getDis(inter);
+    double dis = pos->getDis(*inter->getHit());
     dis = dis * cos((jump * i) - (fov / 2));
 
     double sliceHieght = disToPP / dis;
 
-    sf::RectangleShape rect(sf::Vector2f(sliceWidth, (int)sliceHieght));
-    rect.setPosition(sliceWidth * i, (window->getSize().y - sliceHieght) / 2.0);
+    sf::Sprite wall;
+    sf::Texture wallTexture = world->getMap()->get(*(inter->getWall()))->getTexture();
+    //wallTexture.loadFromFile("../../assets/walls/wall.jpg");
+    wall.setTexture(wallTexture);
 
+    double scale = sliceHieght / wall.getTexture()->getSize().y;
 
-    int colorG = (int)((min(sliceHieght, (double)window->getSize().y) / window->getSize().y) * 255);
-    //if((inter.getX() - ((int)(inter.getX()))) < .2) {colorG = 200;}
-    //if((inter.getY() - ((int)(inter.getY()))) < .2) {colorG = 150;}
-    rect.setFillColor(*new sf::Color(colorG, colorG, colorG));
+    wall.setTextureRect(sf::IntRect((int)(wall.getTexture()->getSize().y * inter->getSlice()), 0, 1, wall.getTexture()->getSize().y));
+    wall.setScale(xScale, scale);
 
-    window->draw(rect);
+    wall.setPosition(sliceWidth * i, (window->getSize().y - sliceHieght) / 2.0);
+
+    int colorG = 255 * (min((double) window->getSize().y, sliceHieght + (window->getSize().y / 2)) / window->getSize().y);
+
+    wall.setColor(*new sf::Color(colorG, colorG, colorG));
+
+    window->draw(wall);
+
 
     rad += jump;
   }
