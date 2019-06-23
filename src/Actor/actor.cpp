@@ -1,4 +1,4 @@
-#include "../Wall/wall.cpp"
+#include "intersection.cpp"
 
 class Actor {
 protected:
@@ -31,15 +31,14 @@ public:
 
   void act();
 
-  //radians
-  Vector<double> castRay(double rad);
+  Intersection * castRay(double rad);
 };
 
 void Actor::setGrid(Grid<Wall> * g) { grid = g;}
 Grid<Wall> * Actor::getGrid() { return grid; }
 
 
-Vector<double> *Actor::getLocation() { return pos; }
+Vector<double> * Actor::getLocation() { return pos; }
 Vector<double> * Actor::getDirection() { return dir; }
 
 void Actor::moveTo(Vector<double> * newPos) {
@@ -72,80 +71,72 @@ void Actor::turn(double rad) {
 
 void Actor::act() {}
 
-Vector<double> Actor::castRay(double rad) {
-  Vector<double> d = *Vector<double>::radianToVector(rad);
+Intersection * Actor::castRay(double rad)
+{
+  Vector<double> * rayDir = Vector<double>::radianToVector(rad);
 
-  int xFlip = (int) (d.getX() / abs(d.getX()));
-  int yFlip = (int) (d.getY() / abs(d.getY()));
+  Vector<int> * gridPos;
 
-  double xLength = 1 / d.getX();
-  double yLength = 1 / d.getY();
+  double x;
+  double y;
 
-  Vector<double> xPos = d;
-  xPos.mult(xLength * ((floor(pos->getX()) + ((xFlip + 1) / 2)) - pos->getX()));
-  xPos.add(*pos);
+  int yFlip;
+  Vector<double> * rayYPos;
+  Vector<double> * rayYInc;
 
-  //xPos.toString();
+  if (rayDir->getX() != 0)
+  {
+    yFlip = (int) (rayDir->getX() / abs(rayDir->getX()));
 
-  Vector<double> yPos = d;
-  yPos.mult(yLength * ((floor(pos->getY()) + ((yFlip + 1) / 2)) - pos->getY()));
-  yPos.add(*pos);
+    x = ((int) pos->getX()) + ((yFlip + 1) / 2.0);
+    y = pos->getY() + ((x - pos->getX()) * tan(rad));
 
-  //yPos.toString();
+    rayYPos = new Vector<double>(x, y);
 
-  Vector<double> xJump = d;
-  xJump.mult(xLength * xFlip);
+    rayYInc = new Vector<double>(yFlip, yFlip * tan(rad));
+  }
 
-  Vector<double> yJump = d;
-  yJump.mult(yLength * yFlip);
+  int xFlip;
+  Vector<double> * rayXPos;
+  Vector<double> * rayXInc;
 
-  int x;
-  int y;
+  if (rayDir->getY() != 0)
+  {
+    xFlip = (int) (rayDir->getY() / abs(rayDir->getY()));
+
+    y = ((int) pos->getY()) + ((xFlip + 1) / 2.0);
+    x = pos->getX() + ((y - pos->getY()) / tan(rad));
+
+    rayXPos = new Vector<double>(x, y);
+
+    rayXInc = new Vector<double>(xFlip / tan(rad), xFlip);
+  }
 
   int i = 0;
 
-  while (true)
+  while (i < 10000)
   {
-    double xDis = abs(pos->getX() - xPos.getX()) + abs(pos->getY() - xPos.getY());
-    double yDis = abs(pos->getX() - yPos.getX()) + abs(pos->getY() - yPos.getY());
 
-    if(isnan(yDis) || xDis < yDis)
+    if (rayDir->getX() != 0 && rayXPos->getDis(*pos) > rayYPos->getDis(*pos))
     {
+      gridPos = new Vector<int>((int)(rayYPos->getX()) - ((yFlip - 1) / -2), (int)(rayYPos->getY()));
 
-      x = xPos.getX() - ((xFlip - 1) / -2);
-      y = floor(xPos.getY());
+      if(!grid->isValid(*gridPos)) { break; }
+      if(grid->isOcupied(*gridPos)) { return new Intersection(rayYPos, gridPos, rayYPos->getY() - floor(rayYPos->getY())); }
 
-      Vector<int> xtPos = *new Vector<int>(x, y);
-      if(!grid->isValid(xtPos)) { break; }
-
-      if(grid->isOcupied(xtPos))
-      {
-        //xtPos.toString();
-        return xPos;
-      }
-
-      xPos.add(xJump);
+      rayYPos->add(*rayYInc);
     }
 
     else
     {
-      x = floor(yPos.getX());
-      y = yPos.getY() - ((yFlip - 1) / -2);
+      gridPos = new Vector<int>((int) rayXPos->getX(), ((int) rayXPos->getY()) - ((xFlip - 1) / -2));
 
-      Vector<int> ytPos = *new Vector<int>(x, y);
-      if(!grid->isValid(ytPos)) { break; }
+      if(!grid->isValid(*gridPos)) { break; }
+      if(grid->isOcupied(*gridPos)) { return new Intersection(rayXPos, gridPos, rayXPos->getX() - floor(rayXPos->getX())); }
 
-
-
-      if(grid->isOcupied(ytPos))
-      {
-          //ytPos.toString();
-          return yPos;
-      }
-
-      yPos.add(yJump);
+      rayXPos->add(*rayXInc);
     }
-
-    i++;
   }
+
+  return new Intersection();
 }
