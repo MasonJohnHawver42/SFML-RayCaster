@@ -21,6 +21,7 @@ public:
   }
 
   void addWall(Vector<int> *loc);
+  void addWall(Vector<int> *loc, sf::Texture t);
   void removeWall(Vector<int> loc);
 
   Grid<Wall> * getMap();
@@ -28,6 +29,7 @@ public:
 };
 
 void World::addWall(Vector<int> * loc) { map->put(new Wall(loc), *loc); }
+void World::addWall(Vector<int> * loc, sf::Texture t) { map->put(new Wall(loc, t), *loc); }
 void World::removeWall(Vector<int> loc) { map->put(nullptr, loc); }
 
 Grid<Wall> * World::getMap() { return map; }
