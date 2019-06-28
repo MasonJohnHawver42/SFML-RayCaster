@@ -1,7 +1,5 @@
-#include "../grid/grid.cpp"
+#include "../vector.cpp"
 #include <SFML/Graphics.hpp>
-
-//check
 
 class Wall
 {
@@ -10,10 +8,14 @@ private:
   sf::Texture texture;
 
 public:
-  Wall() { location = new Vector<int>(0, 0); }
   Wall(Vector<int> * loc)
   {
     location = loc;
+    texture = *new sf::Texture();
+    sf::Image blank;
+    blank.create(1, 1, *new sf::Color(255, 255, 255));
+    texture.loadFromImage(blank);
+
   }
   Wall(Vector<int> * loc, sf::Texture t)
   {
