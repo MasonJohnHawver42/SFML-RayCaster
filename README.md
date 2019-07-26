@@ -12,7 +12,7 @@ V2.0 - https://youtu.be/Fp03-gWVtss (billboard sprites)
 V2.2 - <link pending> (directional sprites (sorry for the month wait (was on leave (also working on a genetic nn)))
 
 
-# future updates (ranked based on awesome-factor):
+# future updates (ranked based on a-f)
 
 real time wall and player collisions (harder (depending on the decided method))
 
