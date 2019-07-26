@@ -7,7 +7,7 @@ protected:
 
   double size; // radius
 
-  sf::Texture texture;
+  std::vector<sf::Texture> textures;
 
   World * world;
 public:
@@ -16,11 +16,6 @@ public:
   {
     pos = p;
     setDir(dir);
-
-    texture = *new sf::Texture();
-    sf::Image blank;
-    blank.create(1, 1, *new sf::Color(255, 255, 255));
-    texture.loadFromImage(blank);
 
     size = 1;
   }
@@ -35,9 +30,16 @@ public:
 
   double getSize();
 
-  sf::Texture getTexture();
+  sf::Texture getTexture(int n);
+  sf::Texture getTexture(Vector<double> p);
 
-  void setTexture(sf::Texture t);
+  int numTextures();
+
+  void addTexture(sf::Texture t);
+
+  void setTexture(int n, sf::Texture t);
+
+  void deleteTexture(int n);
 
   void moveTo(Vector<double> newPos);
   void move(Vector<double> offset);
@@ -56,7 +58,7 @@ public:
   Intersection * castRay(double rad);
 };
 
-void Actor::setWorld(World * w) { world = w; }
+void Actor::setWorld(World * w) { world = w; world->addActor(this); }
 void Actor::removeSelfFromWorld() {
   if(world != nullptr)
   {
@@ -73,9 +75,31 @@ Vector<double> * Actor::getDir() { return dir; }
 
 double Actor::getSize() { return size; }
 
-sf::Texture Actor::getTexture() { return texture; }
+sf::Texture Actor::getTexture(int n) { return textures[n]; }
+sf::Texture Actor::getTexture(Vector<double> p) {
+  if (textures.size() > 0)
+  {
+    p.sub(*pos);
+    double offset = dir->getRad() - p.getRad();
+    return textures[fmod(floor(((offset / ((M_PI * 2) / textures.size())) - .5) + 1) + textures.size(), (double)textures.size())];
+  }
+  sf::Texture defalt;
+  sf::Image blank;
+  blank.create(2, 2, *new sf::Color(0, 0, 0));
+  blank.setPixel(0, 0, sf::Color(128, 0, 128));
+  blank.setPixel(1, 1, sf::Color(128, 0, 128));
+  defalt.loadFromImage(blank);
 
-void Actor::setTexture(sf::Texture t) { texture = t; }
+  return defalt;
+}
+
+int Actor::numTextures() { return textures.size(); }
+
+void Actor::addTexture(sf::Texture t) { textures.push_back(t); }
+
+void Actor::setTexture(int n, sf::Texture t) {textures[n] = t; }
+
+void Actor::deleteTexture(int n) { textures.erase(textures.begin() + n); }
 
 void Actor::moveTo(Vector<double> newPos) {
   double x, y;
