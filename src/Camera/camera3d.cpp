@@ -126,41 +126,40 @@ void Camera3D::display(sf::RenderWindow * window) {
       wall.setColor(*new sf::Color(colorG, colorG, colorG));
 
       window->draw(wall);
+    }
 
-      for(int j = 0; j < world->numActors(); j++)
+    for(int j = 0; j < world->numActors(); j++)
+    {
+      double size = 1;
+
+      double leftMost = radOffsets[j] - actorFos[j];
+      double rightMost = radOffsets[j] + actorFos[j];
+
+      if( (leftMost <= rad && rightMost >= rad) & actorDis[j] > .5)
       {
-        double size = 1;
+        double slice = actorDis[j] * tan(radOffsets[j] - rad);
 
-        double leftMost = radOffsets[j] - actorFos[j];
-        double rightMost = radOffsets[j] + actorFos[j];
-
-        if( (leftMost <= rad && rightMost >= rad) & actorDis[j] > .5)
+        if(dis > sqrt((slice * slice) + (actorDis[j] * actorDis[j])))
         {
-          double slice = actorDis[j] * tan(radOffsets[j] - rad);
+          double sliceHieght = (disToPP / (actorDis[j] * cos(radOffsets[j])));
 
-          if(dis > sqrt((slice * slice) + (actorDis[j] * actorDis[j])))
-          {
-            sliceHieght = (disToPP / (actorDis[j] * cos(radOffsets[j])));
+          sf::Sprite acter;
+          sf::Texture actorTexture = world->getActor(order[j])->getTexture(*pos);
 
-            sf::Sprite acter;
-            sf::Texture actorTexture = world->getActor(order[j])->getTexture();
+          acter.setTexture(actorTexture);
 
-            acter.setTexture(actorTexture);
+          acter.setTextureRect(sf::IntRect((int)(acter.getTexture()->getSize().x * (1 - ((slice + (size / 2)) / size))), 0, 1, acter.getTexture()->getSize().y));
+          acter.setScale(xScale, (sliceHieght) / acter.getTexture()->getSize().y);
 
-            acter.setTextureRect(sf::IntRect((int)(acter.getTexture()->getSize().x * ((slice + (size / 2)) / size)), 0, 1, acter.getTexture()->getSize().y));
-            acter.setScale(xScale, (sliceHieght) / acter.getTexture()->getSize().y);
+          acter.setPosition(sliceWidth * i, (window->getSize().y - (sliceHieght)) / 2.0);
 
-            acter.setPosition(sliceWidth * i, (window->getSize().y - (sliceHieght)) / 2.0);
+          int colorG = max(0, (int)(255 * (min((double) window->getSize().y, sliceHieght * 4) / window->getSize().y)));
+          acter.setColor(*new sf::Color(colorG, colorG, colorG));
 
-            colorG = max(0, (int)(255 * (min((double) window->getSize().y, sliceHieght * 4) / window->getSize().y)));
-            acter.setColor(*new sf::Color(colorG, colorG, colorG));
-
-            window->draw(acter);
-          }
+          window->draw(acter);
         }
       }
     }
-
 
     rad += jump;
   }
