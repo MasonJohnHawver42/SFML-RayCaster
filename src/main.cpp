@@ -14,14 +14,34 @@ int main(int argc, char const *argv[]) {
   sf::Texture barrelTexture;
   barrelTexture.loadFromFile("../assets/ActorSprites/barrel.png");
 
-  barrel->setTexture(barrelTexture);
-  barrel2->setTexture(barrelTexture);
+  barrel->addTexture(barrelTexture);
+  barrel2->addTexture(barrelTexture);
 
-  world->addActor(barrel);
-  world->addActor(barrel2);
+  barrel->setWorld(world);
+  barrel2->setWorld(world);
+
+  Actor * multiDir = new Actor(new Vector<double>(6.5, 8.5), 0);
+
+  sf::Texture number;
+  number.loadFromFile("../assets/ActorSprites/numberedSprites/zero.jpg");
+  multiDir->addTexture(number);
+
+  number.loadFromFile("../assets/ActorSprites/numberedSprites/one.jpg");
+  multiDir->addTexture(number);
+
+  number.loadFromFile("../assets/ActorSprites/numberedSprites/two.jpg");
+  multiDir->addTexture(number);
+
+  number.loadFromFile("../assets/ActorSprites/numberedSprites/three.jpg");
+  multiDir->addTexture(number);
+
+  number.loadFromFile("../assets/ActorSprites/numberedSprites/four.jpg");
+  multiDir->addTexture(number);
+
+  multiDir->setWorld(world);
 
   sf::Texture wallTexture;
-  wallTexture.loadFromFile("../assets/walls/stoneWall.jpg");
+  wallTexture.loadFromFile("../assets/walls/ogWall.jpg");
 
   for (int i = 0; i < world->getMap()->getRows(); i++)
   {
@@ -46,7 +66,7 @@ int main(int argc, char const *argv[]) {
 
   //world->getMap()->toString();
 
-  Camera * cam = new Camera(world, new Vector<double>(3.5, 3.5), M_PI/2);
+  Camera3D * cam = new Camera3D(world, new Vector<double>(3.5, 3.5), M_PI/2);
 
   sf::RenderWindow * window = new sf::RenderWindow(sf::VideoMode(800, 600), "Ray Caster Engine V2");
 
@@ -61,6 +81,12 @@ int main(int argc, char const *argv[]) {
   int origon = window->getSize().x / 2;
 
   window->setMouseCursorVisible(false);
+
+  sf::Texture bulletTexture;
+  bulletTexture.loadFromFile("../assets/ActorSprites/bullet.png");
+
+  time_t t = std::time(0);
+  long int before = static_cast<long int> (t) - 100;
 
   while (window->isOpen())
     {
@@ -77,7 +103,7 @@ int main(int argc, char const *argv[]) {
         rect.setFillColor(*new sf::Color(26, 26, 26));
         window->draw(rect);
 
-        cam->display(800, window);
+        cam->display(window);
 
         double mag = .1;
 
@@ -85,6 +111,23 @@ int main(int argc, char const *argv[]) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) { cam->moveBackward(mag); }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) { cam->strafe(mag); }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) { cam->strafe(-1 * mag); }
+        /**
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+          t = std::time(0);
+          long int after = static_cast<long int> (t);
+          if(after - before > 0)
+          {
+            before = after;
+
+            Vector<double> * p = new Vector<double>(cam->getPos()->getX(), cam->getPos()->getY());
+            double dir = cam->getDir()->getRad();
+            Bullet * bill = new Bullet(p, dir);
+            bill->setTexture(bulletTexture);
+            bill->setWorld(world);
+          }
+        }
+        */
+
 
         mp = sf::Mouse::getPosition(*window);
 
