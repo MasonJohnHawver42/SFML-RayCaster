@@ -14,12 +14,8 @@ V2.2 - <link pending> (directional sprites (sorry for the month wait (was on lea
 
 # future updates (ranked based on a-f)
 
-real time wall and player collisions (harder (depending on the decided method))
+1) real time wall and player collisions (harder (depending on the decided method))
 
-animated walls and crap (med)
+2) animated walls and crap (med)
 
-weapons (easy)
-
-enemys (tbd)
-
-sprite editor (easy (however later))
+3) sprite editor (easy (however later))
