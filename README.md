@@ -11,6 +11,13 @@ V2.0 - https://youtu.be/Fp03-gWVtss (billboard sprites)
 
 V2.2 - <link pending> (directional sprites (sorry for the year-ish wait (was on leave (also working on a genetic nn)))
 
+# Demos on Desmos
+
+ray caster demo - https://www.desmos.com/calculator/8h3dkoubzj
+
+sprites demo - https://www.desmos.com/calculator/gfdjpd1vzu
+
+
 
 # future updates
 
