@@ -1,6 +1,5 @@
 # RayCasterEngine
-
-
+A simple ray caster engine based on the wolfenstien 3d engine made by id software.
 
 # V:
 V1 - https://youtu.be/U_pcrTzJWkU (basic raycaster)
