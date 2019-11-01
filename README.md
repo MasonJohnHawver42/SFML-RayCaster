@@ -19,7 +19,7 @@ Demos on desmos showcassing the math used to calculate the values nessasary to r
 
  - sprites demo - https://www.desmos.com/calculator/gfdjpd1vzu ( how the dis and height / size of the sprites are found so they can be drawn. )
 
-# future updates
+# Future Updates
 
 1) real time wall and player collisions (harder (depending on the decided method))
 2) variable wall heights (hard - have to work out the maths for it and change the rendering method in the camera classs)
