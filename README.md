@@ -23,3 +23,4 @@ Demos on desmos showcassing the math used to calculate the values nessasary to r
  - real time wall and player collisions (harder (depending on the decided method))
  - variable wall heights (hard - have to work out the maths for it and change the rendering method in the camera classs)
  - variable actor heights ( med - just have to change the rendering method in the camera a bit, and think about the maths for this a tad)
+ - better map edditor and a texture editor.
