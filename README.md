@@ -15,9 +15,9 @@ V2.2 - <link pending> (directional sprites (sorry for the year-ish wait (was on 
 
 Demos on desmos showcassing the math used to calculate the values nessasary to render a scene on the screen.
 
-ray caster demo - https://www.desmos.com/calculator/8h3dkoubzj ( how the distance to the walls is found )
+ - ray caster demo - https://www.desmos.com/calculator/8h3dkoubzj ( how the distance to the walls is found )
 
-sprites demo - https://www.desmos.com/calculator/gfdjpd1vzu ( how the dis and height / size of the sprites are found so they can be drawn. )
+ - sprites demo - https://www.desmos.com/calculator/gfdjpd1vzu ( how the dis and height / size of the sprites are found so they can be drawn. )
 
 # future updates
 
