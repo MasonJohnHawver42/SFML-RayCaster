@@ -144,6 +144,8 @@ void Actor::turn(double rad) {
   dir->turn(rad);
 }
 
+// Casts a Ray into the world returning the point of intersection with the ray and a Wall within the World
+// Rad is not an offset of the current dir of the actor
 Intersection * Actor::castRay(double rad)
 {
   Vector<double> * rayDir = Vector<double>::radianToVector(rad);
