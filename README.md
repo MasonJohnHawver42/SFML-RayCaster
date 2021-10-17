@@ -1,9 +1,11 @@
 # RayCasterEngine
 A simple ray caster engine based on the wolfenstien 3d engine made by id software.
 
-# V:
-versions:
+# How it Works
 
+A grid of cells is stores the walls and sprites asociated with the walls. Then a ray for each collum of the screen is cast from the player at a specific angle, and determines the distance and whitch wall is hit. Then a strip of the wall sprite hit by the ray is scalled to a specific height based of the distance to the wall is to the player and is drawn to the screen. In that last step there is also a ray cast for sprites too.
+
+# Versions:
 
 V1 - https://youtu.be/U_pcrTzJWkU (basic raycaster)
 
